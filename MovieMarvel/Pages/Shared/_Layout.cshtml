@@ -1,0 +1,133 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - MovieMarvel</title>
+
+    <environment include="Development">
+        <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.css" />
+        <link rel="stylesheet" href="~/css/site.css" />
+    </environment>
+    <environment exclude="Development">
+        <link rel="stylesheet" href="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/css/bootstrap.min.css"
+              asp-fallback-href="~/lib/bootstrap/dist/css/bootstrap.min.css"
+              asp-fallback-test-class="sr-only" asp-fallback-test-property="position" asp-fallback-test-value="absolute" />
+        <link rel="stylesheet" href="~/css/site.min.css" asp-append-version="true" />
+    </environment>
+</head>
+<body onmousemove="closetooltip()">
+    <partial name="_CookieConsentPartial" />
+    <div id="cart">
+        @if (Program.Control.UserExist == 0)
+        {
+            <form method="post" asp-page-handler="Login">
+                <input id="email" type="text" name="email" placeholder=" email" onclick="closeForm()" style="top:@Model.position"/>
+                <input id="password" type="password" name="password" placeholder=" password" onclick="closeForm()" style="top:@Model.position"/>
+                <input id="submit" type="submit" name="login" value="Sign in" onclick="closeForm()" style="top:@Model.position"/>
+            </form>
+            <form method="post" style="display:@Model.cartDisplay" asp-page-handler="Showcart">
+                <input id="cartImg" type="image" src="~/images/shoppingcart.png" onclick="closeForm()" onmouseover="showCart()"/>
+                @if (Model.cartItemCount > 9)
+                {
+                    <span style="left: -23px">@Model.cartItemCount</span>
+                }
+                else
+                {
+                    <span style="left: -20px">@Model.cartItemCount</span>
+                }
+            </form>
+            <button id="signupBtn" onclick="showSignupForm()" name="Sign up" style="top:@Model.position">Sign up</button>
+        }
+        else
+        {
+            <form method="post" style="display:@Model.cartDisplay" asp-page-handler="Showcart">
+                <input id="cartImg" type="image" src="~/images/shoppingcart.png" onclick="closeForm()"/>
+                @if(Model.cartItemCount > 9)
+                {
+                    <span id="itemcount" style="left: -28px">@Model.cartItemCount</span>
+                }
+                else
+                {
+                    <span id="itemcount" style="left: -25px">@Model.cartItemCount</span>
+                }
+            </form>
+            <form method="post" asp-page-handler="Signout">
+                <input id="submit" type="submit" name="Sign out" value="sign out"/>
+            </form>
+        }
+    </div>
+    <div id="previewCart" onmousemove="displayCart()" onmouseout="closeCart()">
+        @if (Model.rentedMoviePosters.Count > 0)
+        {
+            @for (int i = 0; i < Model.rentedMoviePosters.Count; i++)
+            {
+                <img src="https://image.tmdb.org/t/p/w500/@Model.rentedMoviePosters[i]" style="width: 15%; display: inline; margin: 2px; ">
+                if (@Model.rentedMovieTitles[i].Length > 15)
+                {
+                    <span>@Model.rentedMovieTitles[i].Substring(0, 15)...</span>
+                }
+                else
+                {
+                    string title = @Model.rentedMovieTitles[i] + "               ";
+                    <span>@title.Substring(0, 15)...</span>
+                }
+                <span>$1.99</span>
+                <select>
+                    <option>rent</option>
+                    <option>1 day</option>
+                    <option>2 days</option>
+                    <option>3 days</option>
+                </select>
+                <button>Remove</button>
+                if (i < Model.rentedMoviePosters.Count - 1)
+                {
+                    <hr/>
+                }
+            }
+            <button id="checkout">Check Out</button>
+        }
+    </div>
+    <div id="blocker" onclick="closeForm()" style="display:@Model.showSignUpForm"></div>
+    <div id="signupForm" style="display:@Model.showSignUpForm">
+        <div style="float: right; width: 20%">
+            <form id="form" method="post" style="background:white; width: 100%; border: 2px solid black; background: gold;" asp-page-handler="CreateAccount">
+                <fieldset>
+                    <legend>Sign-up Form:<span id="close" onclick="closeForm()">x</span></legend>
+                    <span>Email:</span><br>
+                    <input class="signupFormInput" type="text" name="email" placeholder=" enter email" style="width: 95%">
+                    <br>
+                    <span>Password:</span><br>
+                    <input class="signupFormInput" type="password" name="password" placeholder=" password" style="width: 95%">
+                    <br><br>
+                    <input class="signupFormInput" type="submit" value="Create Account" style="margin-bottom: 5px">
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    @RenderBody()
+
+    <environment include="Development">
+        <script src="~/lib/jquery/dist/jquery.js"></script>
+        <script src="~/lib/bootstrap/dist/js/bootstrap.js"></script>
+        <script src="~/js/site.js" asp-append-version="true"></script>
+    </environment>
+    <environment exclude="Development">
+        <script src="https://ajax.aspnetcdn.com/ajax/jquery/jquery-3.3.1.min.js"
+                asp-fallback-src="~/lib/jquery/dist/jquery.min.js"
+                asp-fallback-test="window.jQuery"
+                crossorigin="anonymous"
+                integrity="sha384-tsQFqpEReu7ZLhBV2VZlAu7zcOV+rXbYlF2cqB8txI/8aZajjp4Bqd+V6D5IgvKT">
+        </script>
+        <script src="https://ajax.aspnetcdn.com/ajax/bootstrap/3.3.7/bootstrap.min.js"
+                asp-fallback-src="~/lib/bootstrap/dist/js/bootstrap.min.js"
+                asp-fallback-test="window.jQuery && window.jQuery.fn && window.jQuery.fn.modal"
+                crossorigin="anonymous"
+                integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa">
+        </script>
+        <script src="~/js/site.min.js" asp-append-version="true"></script>
+    </environment>
+
+    @RenderSection("Scripts", required: false)
+</body>
+</html>

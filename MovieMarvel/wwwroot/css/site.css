@@ -1,0 +1,444 @@
+body 
+{
+    width: 100%;
+    margin: 0 auto;
+    background-image: url(../images/background.png), url(../images/fox_theatre.jpg);
+    background-size: cover, cover;
+    background-position: center, center;
+}
+#grid
+{
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(6, 1fr);
+    grid-auto-rows: minmax(100px, auto);
+    grid-template-areas:
+        "hdr hdr hdr hdr hdr hdr"
+        "sch sch sch sch sch sch"
+        "vid vid vid vid vid vid"
+        "rat rat des des des des"
+        "cas cas cas cas cas cas"
+        "cas cas cas cas cas cas"
+        "cas cas cas cas cas cas"
+        "ftr ftr ftr ftr ftr ftr";
+}
+#castGrid 
+{
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: repeat(10, minmax(100px, auto));
+    /*grid-row-gap: 10px;*/
+    margin: 0 auto;
+}
+#cart 
+{
+    position: fixed;
+    z-index: 13;
+    text-align: right;
+    width: 100%;
+    padding-right: 10px;
+    margin: 5px;
+    /*background: aqua;*/
+    /*grid-column: 1/13;
+    grid-row: 1/1;
+    margin: 5px 5px;
+    /*margin-left: 5px;
+    
+    */
+}
+    #cart form
+    {
+        display: inline;
+    }
+    #cart input
+    {
+        position: relative;
+    }
+    #cartImg
+    {
+        width: 30px; 
+        height: 30px;
+    }
+    #cart span
+    {
+        font-size:x-small; 
+        position: relative; 
+        top: -15px;
+        z-index: 55; 
+        margin: 0
+    }
+#submit
+{
+    margin: 0; 
+    top: -13px;
+}
+#signupBtn
+{
+    position: relative; 
+}
+#signupForm
+{
+    position: fixed;
+    z-index: 33;
+    width: 100%;
+    height: 193px;
+    top: 35px;
+}
+    #signupForm input, span
+    {
+        margin-left: 5px;
+    }
+.signupFormInput
+    {
+        border: 1px solid grey;
+    }
+#blocker
+{
+    position: fixed;
+    z-index: 35;
+    width: 80%;
+    height: 193px;
+    top: 35px;
+}
+#previewCart 
+{
+    position: fixed;
+    width: 39%;
+    max-height: 225px;
+    top: 35px;
+    margin-left: 60%;
+    overflow-y: auto;
+    background: gold;
+    display: none;
+}
+    #previewCart span, select, button
+    {
+        display: inline; 
+        margin: 0 10px; 
+        font-size: medium
+    }
+    #previewCart button
+    {
+        background-color: dimgrey;
+    }
+    #previewCart hr
+    {
+        margin: 0; 
+        border-color: grey;
+    }
+    #checkout
+    {
+        float: right; 
+        margin: 5px;
+    }
+#close
+{
+    cursor: pointer;
+    margin-left: 40%;
+}
+#castheader
+{
+    grid-column: 1/13;
+    grid-row: 1/3;
+    margin-top: 50px;
+    text-align: center;
+}
+    #castheader input, a
+    {
+        margin: 0 auto;
+    }
+#poster 
+{
+    grid-column: 1/4;
+    grid-row: 3/5;
+    text-align: center;
+}
+    #poster img
+    {
+        width: 90%; 
+        margin: 0 auto;
+        border-radius: 10px;
+    }
+    #poster h2
+    {
+        margin: 0 auto; 
+        padding: 0; 
+        color: gold;
+    }
+#desCast 
+{
+    grid-column: 4/13;
+    grid-row: 3/5;
+    text-align: center;
+}
+    #desCast h1 
+    {
+        color: gold;
+        font-size: x-large;
+        text-align: justify;
+        margin: 0 5px;
+        margin-right: 10px;
+    }
+#relatedMovies
+{
+    grid-column: 1/13;
+    grid-row: 5/6;
+    text-align: center; 
+    padding: 15px 0;
+    color: gold;
+}
+    #relatedMovies p 
+    {
+        vertical-align: middle;
+        height: auto;
+        font-size: xx-large;
+    }
+#preview 
+{
+    grid-column: 4/10;
+    grid-row: 6/8;
+    text-align: center;
+}
+    #preview img 
+    {
+        cursor: pointer;
+        width: 60%;
+        margin: 0 auto;
+    }
+#titles 
+{
+    grid-column: 4/10;
+    grid-row: 8/9;
+    text-align: center;
+    vertical-align: middle;
+}
+    #titles h1 
+    {
+        font-size: xx-large;
+        color: gold;
+    }
+.prev,
+.next 
+{
+    cursor: pointer;
+    position: relative;
+    top: 40%;
+    width: auto;
+    padding: 16px;
+    color: white;
+    font-weight: bold;
+    font-size: 20px;
+    border-radius: 0 3px 3px 0;
+    user-select: none;
+    -webkit-user-select: none;
+    margin: auto 0;
+    text-decoration: none;
+}
+.next 
+{
+    float: right;
+    border-radius: 3px 0 0 3px;
+}
+.prev 
+{
+    float: left;
+    border-radius: 3px 0 0 3px;
+}
+    .prev:hover,
+    .next:hover 
+    {
+        background-color: rgba(0, 0, 0, 0.8);
+    }
+#otherMovies 
+{
+    grid-column: 1/13;
+    grid-row: 9/10;
+    text-align: center;
+}
+    #otherMovies input
+    {
+        border-radius: 5%;
+        border: 1px solid black;
+        width: 100px; 
+        height: 140px; 
+        margin: 0 auto;
+    }
+#castFooter
+{
+    grid-column: 1/13;
+    grid-row: 10/11;
+    text-align: center;
+    padding: 50px;
+}
+header 
+{
+    display: grid;
+    grid-area: hdr;
+    text-align: center;
+    margin-bottom: 20px;
+    margin-top: 50px;
+}
+    header img, a
+    {
+        margin: 0 auto;
+    }
+#search
+{
+    display: grid;
+    grid-area: sch;
+    width: 100%;
+    text-align: center;
+}
+#panel
+{
+    cursor: pointer;
+    height: 30px;
+    width: 15%;
+    margin: 0 auto;
+    border-radius: 5px 5px 0 0; 
+    vertical-align: middle;
+    background: gold;
+}
+#rent
+{
+    margin: 0 auto;
+}
+#selectedPosterdiv
+{
+    margin: 5px auto;
+    width: 50%;
+}
+    #selectedPosterdiv img
+    {
+       border: 1px solid black;
+    }
+.thumbs 
+{
+    width: 100px;
+    height: 140px;
+    border: 4px solid #fff;
+    border-radius: 4px;
+}
+#searchForm, #searchImage 
+{
+    margin: 0 auto;
+    margin-bottom: 20px;
+}
+#desc 
+{
+    display: grid;
+    grid-area: des;
+    width: 100%;
+    height: 100%;
+    vertical-align: middle;
+    margin: auto 0;
+}
+    #desc h2
+    {
+        margin: 0;
+        color: gold;
+    }
+    #desc p
+    {
+        color: white; 
+        font-size: medium; 
+        margin: 5px;
+    }
+#rating 
+{
+    display: grid;
+    grid-area: rat;
+    width: 100%;
+    text-align: center;
+}
+    #rating div 
+    {
+        display: table;
+        margin: 0 auto;
+    }
+        #rating div img 
+        {
+            margin: 0 auto;
+            height: 50px;
+            width: 50px;
+        }
+    .rater
+    {
+        width: 20px; 
+        height: 20px;
+        margin: 10px;
+    }
+#video 
+{
+    grid-area: vid;
+    width: 100%;   
+    text-align: center;
+    margin-bottom: 20px;
+}
+    #video p
+    {
+        font-weight: bold; 
+        font-size: medium; 
+        color: white;
+    }
+    .framediv 
+    {
+        display: table;
+        margin: 0 auto;
+    }
+    .frame 
+    {
+        width: 300px;
+        margin: 10px;
+    }
+#cast 
+{
+    display: grid;
+    grid-area: cas;
+    width: 100%;
+    text-align: center;
+}
+    #cast h2 
+    {
+        margin: auto 0;
+        color: white;
+        padding: 0;
+        vertical-align: middle;
+    }
+    #castdiv 
+    {
+        display: table;
+        margin: 0 auto;
+    }
+        #castimg 
+        {
+            height: 150px;
+            width: 150px;
+            margin: 10px;
+            border-right: 2px solid black;
+            border-bottom: 2px solid black;
+            border-radius: 50%;
+        }
+footer 
+{
+    display: grid;
+    grid-area: ftr;
+    width: 100%;
+    text-align: center;
+    padding: 50px;
+}
+a
+{
+    text-decoration: none !important;
+}
+input
+{
+    border: none;
+    border-radius: 5px;
+}
+button
+{
+    border: none;
+    border-radius: 5px;
+}

@@ -1,0 +1,107 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+}
+<div id="grid" onclick="closeForm()" style="background-image:url(https://image.tmdb.org/t/p/original/@Model.backDrop); background-size: cover; background-position: center">
+    <header>
+        <a href="./Index" title="Home">
+            <img src="~/images/MovieMagicbsLogo.png" />
+        </a>
+    </header>
+    <div id="search">
+        <form id="searchForm" method="post" asp-page-handler="Poster">
+            <input type="search" name="search" placeholder="search" value="@Model.search">
+            <input type="submit" name="intent" value="Find Movie">
+        </form>
+        @{
+            string photo = "https://image.tmdb.org/t/p/w300/" + Model.backDrop;
+        }
+        <div id="selectedPosterdiv" style="display:@Model.moviePosterShow">
+            <img src=@photo>
+        </div>
+        <form id="searchImage" method="post" asp-page-handler="Movies" style="display:@Model.showMoviePosters">
+            @if (Model.emptySearch)
+            {
+                <p style="font-weight: bold; color: white">
+                    PLEASE ENTER A MOVIE TITLE TO RUN SEARCH!!!
+                </p>
+            }
+            else if (Model.invalidSearch)
+            {
+                <p style="font-weight: bold; color: white">
+                    SEARCH PRODUCED NO RESULTS!!!
+                </p>
+            }
+            else
+            {
+                @for (int i = 0; i < Model.posterPath.Count; i++)
+                {
+                    if (Model.posterPath[i] != "")
+                    {
+                        string imagePath = "https://image.tmdb.org/t/p/w500/" + Model.posterPath[i];
+                        <input type="image" src=@imagePath class="thumbs" onclick="showBigPoster()" name="intent" value="@Model.id[i]">
+                    }
+                }
+            }
+        </form>
+        <div id="panel" onclick="setdivdisplay()" style="display:@Model.moviePosterShow">&uarr;&nbsp; show posters &nbsp;&uarr;</div>
+    </div>
+    <div id="video" style="display:@Model.moviePosterShow">
+        @for (int i = 0; i < Model.title.Count; i++)
+        {
+            <p id="title">
+                @Model.title[0] - Trailers
+            </p>
+            <form method="post" asp-page-handler="RentMovie">
+                <button id="rent" type="submit" name="rent" value="rent this movie" style="background-color: gold">rent this movie</button>
+                <span id="tooltiptext" style="position: absolute; color: gold; background: black; border-radius: 3px; padding: 0 2px; display: @Model.tooltip">Movie already in cart!</span>
+            </form>
+        }
+
+        <div class="framediv">
+            @for (int i = 0; i < Model.vidClips.Count; i++)
+            {
+                @if (i < 3)
+                {
+                    <iframe src="https://www.youtube.com/embed/@Model.vidClips[i]" class="frame"
+                            frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                }
+            }
+        </div>
+    </div>
+    <div id="rating" style="display:@Model.moviePosterShow">
+        <div>
+            <img src="~/images/GoldStar.png">
+            <h1 style="color: gold">@Model.rating</h1>
+            <form method="post" asp-page-handler="Vote">
+                <input type="image" class="rater" name="vote" value="2" src="~/images/thumbs-up-sign_iphone.png" style="opacity:@Model.thumbsUp" />
+                <input type="image" class="rater" name="vote" value="1" src="~/images/shrug_apple.png" style="opacity:@Model.inBetween" />
+                <input type="image" class="rater" name="vote" value="0" src="~/images/thumbs-down-sign_iphone.png" style="opacity:@Model.thumbsDown" />
+            </form>
+        </div>
+    </div>
+    <div id="desc" style="display: @Model.moviePosterShow">
+        <h2>SYNOPSIS: </h2>
+        <p>@Model.description</p>
+    </div>
+    <div id="cast" style="display: @Model.moviePosterShow">
+        <h2>CAST</h2>
+        <div id="castdiv">
+            @for (int i = 0; i < Model.actorImg.Count; i++)
+            {
+                @if (i < 7)
+                {
+                    if (Model.actorImg[i] != "null")
+                    {
+                        string imagePath = "https://image.tmdb.org/t/p/w500/" + Model.actorImg[i];
+                        <a asp-page="./Cast" asp-route-id="@Model.castID[i]">
+                            <img id="castimg" type="image" src=@imagePath name="intent" value="@Model.castID[i]">
+                        </a>
+                    }
+                }
+            }
+        </div>
+    </div>
+    <footer>&copy;BuzzLightYear</footer>
+</div>

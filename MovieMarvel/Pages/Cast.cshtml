@@ -1,0 +1,57 @@
+﻿@page
+@model MovieMarvel.Pages.CastModel
+@{
+    ViewData["Title"] = "Cast";
+}
+<div id="castGrid" onclick="closeForm()" style="background-image:url(../images/background.png), url(https://image.tmdb.org/t/p/original/@Model.backDrop); background-size: cover, cover; background-position: center, center">
+    <header id="castheader">
+        <a href="./Index" title="Home page">
+            <input type="image" src="~/images/MovieMagicbsLogo.png"/>
+        </a>
+    </header>
+    <div id="poster">
+        @for (int i = 0; i < Model.castImg.Count; i++)
+        {
+            <img src="https://image.tmdb.org/t/p/w500/@Model.castImg[i]">
+            <h2>@Model.name</h2>
+        }
+    </div>
+    <div id="desCast">
+        <h1>@Model.bio</h1>
+    </div>
+  <div id="relatedMovies">
+      <p>RELATED MOVIES:</p>
+  </div>
+    <div id="preview">
+        <a id="castlink">
+            <img id="mySlides" onclick="mySlidesClicked()" title="click to search movie">
+        </a>
+        <a class="prev" onclick="plusSlides(-1)">&#10094;</a>
+        <a class="next" onclick="plusSlides(1)">&#10095;</a>
+    </div>
+    <div id="titles">
+        <h1 id="title"></h1>
+    </div>
+    <div id="otherMovies">
+        @for (int i = 0, count = 0; i < Model.posterPaths.Count; i++)
+        {
+            if (Convert.ToDouble(Model.vote[i]) >= 6.0 && count < 11 && Model.movieID != Model.movieId[i] && @Model.posterPaths[i] != "null")
+            {
+                <input type="image" id=@count class="images" onclick="currentSlide(this.id)" value=@Model.movieId[i] name="@Model.titles[i]" src="https://image.tmdb.org/t/p/original/@Model.posterPaths[i]" />
+                count++;
+            }
+            else if (count == 0 && i == (Model.posterPaths.Count - 1))
+            {
+                @for (int j = 0; j < Model.posterPaths.Count; j++)
+                {
+                    if (count < 3 && Model.movieID != Model.movieId[j] && @Model.posterPaths[i] != "null")
+                    {
+                        <input type="image" id=@count class="images" onclick="currentSlide(this.id)" value=@Model.movieId[j] name="@Model.titles[j]" src="https://image.tmdb.org/t/p/original/@Model.posterPaths[j]" />
+                        count++;
+                    }
+                }
+            }
+        }
+    </div>
+    <footer id="castFooter">&copy;BuzzLightYear</footer>
+</div>
