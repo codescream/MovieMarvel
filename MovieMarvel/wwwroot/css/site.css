@@ -31,10 +31,19 @@ body
     /*grid-row-gap: 10px;*/
     margin: 0 auto;
 }
+#cartgrid
+{
+    display: grid;
+    width: 100%;
+    grid-template-columns: repeat(12, 1fr);
+    grid-template-rows: repeat(7, minmax(100px, auto));
+    /*grid-row-gap: 10px;*/
+    margin: 0 auto;
+}
 #cart 
 {
     position: fixed;
-    z-index: 13;
+    z-index: 32;
     text-align: right;
     width: 100%;
     padding-right: 10px;
@@ -47,7 +56,7 @@ body
     
     */
 }
-    #cart form
+    #cart #signin, #signout
     {
         display: inline;
     }
@@ -59,28 +68,55 @@ body
     {
         width: 30px; 
         height: 30px;
+        left: 5px;
     }
-    #cart span
+    #itemcount
     {
         font-size:x-small; 
         position: relative; 
         top: -15px;
         z-index: 55; 
-        margin: 0
+        margin: 0;
+        cursor: pointer;
     }
+#errlogin, #userCreation, #errCreation
+{
+    background: black; 
+    display: inline; 
+    position: fixed; 
+    top: 30px; 
+    margin-left: 60%; 
+    padding: 0 3px;
+    color: white;
+    border-radius: 3px;
+}
+
+/*///////////////////////////////////////////*/
+@media(max-width: 700px)
+{
+    #errlogin
+    {
+        display: inline;
+        top: 50px; 
+        margin-left: 50%;
+        background: red;
+        padding: 0 3px;
+    }
+}
+/*///////////////////////////////////////////*/
+#signoutBtn
+{
+    top: -13px;
+}
 #submit
 {
     margin: 0; 
     top: -13px;
 }
-#signupBtn
-{
-    position: relative; 
-}
 #signupForm
 {
     position: fixed;
-    z-index: 33;
+    z-index: 51;
     width: 100%;
     height: 193px;
     top: 35px;
@@ -93,10 +129,33 @@ body
     {
         border: 1px solid grey;
     }
-#blocker
+#form #submit
+{
+    margin-bottom: 5px;
+}
+#signupForm div
+{
+    float: right; 
+    width: 20%;
+}
+#form
+{
+    width: 100%; 
+    border: 2px solid black; 
+    background: gold;
+}
+.inputfield
+{
+    width: 95%;
+}
+#inputBtn
+{
+    margin-bottom: 5px;
+}
+#blocker 
 {
     position: fixed;
-    z-index: 35;
+    z-index: 100;
     width: 80%;
     height: 193px;
     top: 35px;
@@ -104,40 +163,82 @@ body
 #previewCart 
 {
     position: fixed;
-    width: 39%;
+    z-index: 51;
+    width: 32%;
     max-height: 225px;
     top: 35px;
-    margin-left: 60%;
+    margin-left: 63%;
     overflow-y: auto;
     background: gold;
     display: none;
+    border: 2px solid black;
+    border-radius: 3px;
 }
-    #previewCart span, select, button
+    #cost
     {
         display: inline; 
         margin: 0 10px; 
-        font-size: medium
+        font-size: medium;
+    }
+    #previewCart img
+    {
+        width: 18%; 
+        display: inline; 
+        margin: 2px;
     }
     #previewCart button
     {
         background-color: dimgrey;
+        font-size: medium;
     }
+.remove 
+{
+    display: inline;
+    margin-left: 80px;
+}
     #previewCart hr
     {
         margin: 0; 
         border-color: grey;
     }
-    #checkout
+#titlediv
+{
+    display: inline-table; 
+    width: 60%; 
+    margin-left: 10px;
+}
+#carttitlediv
+{
+    display: inline-table; 
+    width: 30%; 
+    margin-left: 20px;
+}
+    #title
     {
-        float: right; 
-        margin: 5px;
+        display: inline;
+        font-size: large;
     }
-#close
+    #cartcost
+    {
+        display: inline; 
+        margin: 0 80px 0 10px; 
+        font-size: medium;
+    }
+.checkout 
+{
+    width: 90%;
+    margin: 5px;
+    margin: 5px auto;
+    font-size: medium;
+    background: grey;
+    color: black;
+}
+#close 
 {
     cursor: pointer;
     margin-left: 40%;
 }
-#castheader
+#castheader, #cartheader
 {
     grid-column: 1/13;
     grid-row: 1/3;
@@ -271,6 +372,76 @@ body
     text-align: center;
     padding: 50px;
 }
+#cartitems
+{
+    grid-column: 1/10;
+    grid-row: 3/7;
+}
+    #cartitems h2
+    {
+        margin: 5px; 
+        color: white;
+    }
+.moviedivs
+{
+    background: gold; 
+    margin: 5px; 
+    border-radius: 5px 5px 0 0;
+}
+    .moviedivs a img
+    {
+        width: 15%; 
+        margin: 5px 5px 5px 30px;
+    }
+    .moviedivs form
+    {
+        display: inline;
+    }
+#cartsummary
+{
+    position: fixed; 
+    top: 5%; 
+    width: 24.2%; 
+    z-index: 50; 
+    height: 200px; 
+    background: gold; 
+    margin: 5px; 
+    margin-left: 75.4%; 
+    border-radius: 5px; 
+    text-align: center;
+    border: 2px solid black;
+}
+    #cartsummary p
+    {
+        font-weight: bold; 
+        font-size: large; 
+        margin: 10px 5px 20px;
+    }
+    #cartsummary button
+    {
+        width: 90%;
+    }
+#extras 
+{
+    grid-column: 10/13;
+    grid-row: 3/6;
+    margin: 0 5px 5px 5px;
+    border-radius: 5px;
+    background: gold;
+}
+    #extras p
+    {
+        font-weight: bold; 
+        font-size: large; 
+        margin: 10px 5px 20px;
+    }
+#cartfooter
+{
+    grid-column: 1/13;
+    grid-row: 7/7;
+    text-align: center;
+    padding: 50px;
+}
 header 
 {
     display: grid;
@@ -303,6 +474,15 @@ header
 #rent
 {
     margin: 0 auto;
+    background-color: gold;
+}
+#tooltiptext
+{
+    position: absolute; 
+    color: gold; 
+    background: black; 
+    border-radius: 3px; 
+    padding: 0 2px;
 }
 #selectedPosterdiv
 {
@@ -320,6 +500,11 @@ header
     border: 4px solid #fff;
     border-radius: 4px;
 }
+.posterButton
+{
+   padding: 0;
+}
+
 #searchForm, #searchImage 
 {
     margin: 0 auto;
@@ -362,6 +547,10 @@ header
             margin: 0 auto;
             height: 50px;
             width: 50px;
+        }
+        #rating div h1
+        {
+            color: gold
         }
     .rater
     {

@@ -16,9 +16,13 @@ namespace MovieMarvel.Pages
         public string name = "";
         public string movieID = "";
         public string showSignUpForm = "none";
+        public string errDisplay = "none";
+        public string creationDisplay = "none";
+        public string errCreationDisplay = "none";
         public string cartDisplay = History.GetCartDisplay();
         public string position = History.GetCartPosition();
         public int cartItemCount = History.GetItemCount();
+        public double totalCost = Program.Rental.totalMovieCost;
 
         public List<string> bios = new List<string>();
         public List<string> castImg = new List<string>();
@@ -26,6 +30,9 @@ namespace MovieMarvel.Pages
         public List<string> titles = new List<string>();
         public List<string> vote = new List<string>();
         public List<string> movieId = new List<string>();
+        public List<string> rentedMoviePosters = Program.Rental.moviePosters;
+        public List<string> rentedMovieTitles = Program.Rental.movieTitles;
+        public List<double> rentedMovieCosts = Program.Rental.movieCosts;
 
         public async Task OnGet(string id)
         {
@@ -58,10 +65,41 @@ namespace MovieMarvel.Pages
             titles = bNinja.GetDetails("\"original_title\"");
         }
 
-        public async Task OnPostLogin(string email, string password)
+        public async Task OnPostLogin(string emailsignin, string passwordsignin)
         {
-            Program.Control.Login(email, password);
-            await ReloadPageContent();
+            int cartCount = Program.Control.Login(emailsignin, passwordsignin); // login and retrieve cart item count
+
+            if (cartCount < 0)
+            {
+                errDisplay = "inline";
+                await ReloadPageContent();
+            }
+            else
+            {
+                History.SetItemCount(cartCount);
+                cartItemCount = History.GetItemCount();
+                totalCost = Program.Rental.totalMovieCost;
+                cartDisplay = "inline";
+
+                if (Program.Rental.movieIDs.Count > 0)
+                {
+                    Program.Rental.AddItemsFromList(cartID: Program.Control.CartID);
+                    totalCost = Program.Rental.totalMovieCost;
+                    cartItemCount = History.GetItemCount() + Program.Rental.addedListItems;
+                    History.SetItemCount(cartItemCount);
+                }
+                else
+                {
+                    //return current cart item count
+                    cartItemCount = History.GetItemCount();
+
+                    //get movie details from database
+                    Program.Rental.GetMovieList(cartID: Program.Control.CartID);
+                    totalCost = Program.Rental.totalMovieCost;
+                }
+
+                await AdjustCartDivs();
+            }
         }
 
         public async Task ReloadPageContent()
@@ -72,6 +110,44 @@ namespace MovieMarvel.Pages
         public async Task OnPostSignout()
         {
             Program.Control.UserExist = 0;
+            Program.Control.CartID = 0;
+            Program.Rental.movieIDs.Clear();
+            Program.Rental.moviePosters.Clear();
+            Program.Rental.movieTitles.Clear();
+            Program.Rental.movieCosts.Clear();
+            History.ResetItemCount();
+            History.SetCartDisplay("none");
+            History.SetCartPosition("0px");
+            cartDisplay = History.GetCartDisplay();
+            position = History.GetCartPosition();
+            cartItemCount = History.GetItemCount();
+
+            //Program.Control.UserExist = 0;
+            await ReloadPageContent();
+        }
+
+        public async Task AdjustCartDivs()
+        {
+            cartDisplay = "inline";
+            position = "-13px";
+            History.SetCartDisplay("inline");
+            History.SetCartPosition("-13px");
+            await ReloadPageContent();
+        }
+
+        public async Task OnPostCreateAccount(string myemail, string mypassword)
+        {
+            int userExist = Program.Control.CreateAccount(myemail, mypassword);
+
+            if (userExist < 0)
+            {
+                errCreationDisplay = "inline";
+            }
+            else
+            {
+                creationDisplay = "inline";
+            }
+
             await ReloadPageContent();
         }
     }

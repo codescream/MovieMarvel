@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Home page";
 }
-<div id="grid" onclick="closeForm()" style="background-image:url(https://image.tmdb.org/t/p/original/@Model.backDrop); background-size: cover; background-position: center">
+<div id="grid" onclick="closeForm(), resetInputs()" style="background-image:url(https://image.tmdb.org/t/p/original/@Model.backDrop); background-size: cover; background-position: center">
     <header>
         <a href="./Index" title="Home">
             <img src="~/images/MovieMagicbsLogo.png" />
@@ -40,7 +40,9 @@
                     if (Model.posterPath[i] != "")
                     {
                         string imagePath = "https://image.tmdb.org/t/p/w500/" + Model.posterPath[i];
-                        <input type="image" src=@imagePath class="thumbs" onclick="showBigPoster()" name="intent" value="@Model.id[i]">
+                        <button type="submit" name="intent" value="@Model.id[i]" class="posterButton">
+                            <img src=@imagePath class="thumbs" onclick="showBigPoster()">
+                        </button>
                     }
                 }
             }
@@ -54,8 +56,8 @@
                 @Model.title[0] - Trailers
             </p>
             <form method="post" asp-page-handler="RentMovie">
-                <button id="rent" type="submit" name="rent" value="rent this movie" style="background-color: gold">rent this movie</button>
-                <span id="tooltiptext" style="position: absolute; color: gold; background: black; border-radius: 3px; padding: 0 2px; display: @Model.tooltip">Movie already in cart!</span>
+                <button id="rent" type="submit" name="rent" value="rent this movie">rent this movie</button>
+                <span id="tooltiptext" style="display: @Model.tooltip">Movie already in cart!</span>
             </form>
         }
 
@@ -73,7 +75,7 @@
     <div id="rating" style="display:@Model.moviePosterShow">
         <div>
             <img src="~/images/GoldStar.png">
-            <h1 style="color: gold">@Model.rating</h1>
+            <h1>@Model.rating</h1>
             <form method="post" asp-page-handler="Vote">
                 <input type="image" class="rater" name="vote" value="2" src="~/images/thumbs-up-sign_iphone.png" style="opacity:@Model.thumbsUp" />
                 <input type="image" class="rater" name="vote" value="1" src="~/images/shrug_apple.png" style="opacity:@Model.inBetween" />

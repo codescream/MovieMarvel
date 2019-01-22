@@ -1,0 +1,58 @@
+﻿@page
+@model CartModel
+@{
+    ViewData["Title"] = "Cart";
+}
+<div id="cartgrid" onclick="closeForm(), resetInputs()" style="background-image:url(../images/background.png); background-size: cover; background-position: center">
+    <header id="cartheader">
+        <a href="./Index" title="Home page">
+            <input type="image" src="~/images/MovieMagicbsLogo.png" />
+        </a>
+    </header>
+    <div id="cartitems">
+        <h2>Shopping Cart</h2>
+        @for (int i = 0; i < Model.rentedMoviePosters.Count; i++)
+        {
+            <div id="rentedMovie(@i)" class="moviedivs">
+                <a asp-page="./Index" asp-route-id="@Model.rentedMovieTitles[i]"><img src="https://image.tmdb.org/t/p/w500/@Model.rentedMoviePosters[i]"></a>
+                <div id="carttitlediv" title="@Model.rentedMovieTitles[i]">
+                    @if (Model.rentedMovieTitles[i].Length > 30)
+                    {
+                        <p id="title">@Model.rentedMovieTitles[i].Substring(0, 30)...</p>
+                    }
+                    else
+                    {
+                        <p id="title">@Model.rentedMovieTitles[i]</p>
+                    }
+                </div>
+                <p id="cartcost">CDN$ @Model.rentedMovieCosts[i]</p>
+                <form method="post" asp-page-handler="Remove">
+                    <select name="duration">
+                        <option>rent</option>
+                        <option>1 day</option>
+                        <option>2 days</option>
+                        <option>3 days</option>
+                    </select>
+                    <button type="submit" class="remove" id="@i" name="remove" onclick="deleteFromCart(this.id)" value="@Model.rentedMovieTitles[i]">Remove</button>
+                </form>
+            </div>
+        }
+    </div>
+    <div id="cartsummary">
+        <p>Subtotal (@Model.cartItemCount items): CDN$ @Model.totalCost</p>
+        <button>Proceed to Checkout</button>
+    </div>
+    <div id="extras">
+        <p>Similar Movies</p>
+        @for (int i = 0; i < Model.similarMoviesTitle.Count; i++)
+        {
+        <div>
+            <a  asp-page="./Index" asp-route-id="@Model.similarMoviesTitle[i]"><img src="https://image.tmdb.org/t/p/w500/@Model.similarMoviesPoster[i]" style="width: 30%; display: inline; margin: 5px" /></a>
+            <div style="width: 50%; display: inline-table; margin: auto 0">
+                <p style="">@Model.similarMoviesTitle[i]</p>
+            </div>
+        </div>
+        }
+    </div>
+    <footer id="cartfooter">&copy;BuzzLightYear</footer>
+</div>

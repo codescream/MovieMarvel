@@ -17,15 +17,16 @@ namespace MovieMarvel
         public string Details { get; set; }
         public string Credits { get; set; }
         public string movieCredits { get; set; }
+        public string SimilarMovies { get; set; }
         public async Task GrabPosterAsync(string search)
             {
                 RunClient();
 
-                // grab 20 vids
-                HttpResponseMessage response = await client.GetAsync("https://api.themoviedb.org/3/search/movie?api_key=d194eb72915bc79fac2eb1a70a71ddd3&query="
-                                                                    + search);
+            // grab 20 vids
+            HttpResponseMessage response = await client.GetAsync("https://api.themoviedb.org/3/search/movie?api_key=d194eb72915bc79fac2eb1a70a71ddd3&query="
+                                                                + search);
 
-                if (response.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode)
                 {
                     Search = search;
                     Data = await response.Content.ReadAsStringAsync();
@@ -50,7 +51,7 @@ namespace MovieMarvel
                 HttpResponseMessage response3 = await client.GetAsync("https://api.themoviedb.org/3/movie/" + intent +
                     "/credits?api_key=d194eb72915bc79fac2eb1a70a71ddd3");
 
-                if (response.IsSuccessStatusCode || response2.IsSuccessStatusCode || response3.IsSuccessStatusCode)
+            if (response.IsSuccessStatusCode || response2.IsSuccessStatusCode || response3.IsSuccessStatusCode)
                 {
                     Videos = await response.Content.ReadAsStringAsync();
                     Details = await response2.Content.ReadAsStringAsync();
@@ -76,6 +77,20 @@ namespace MovieMarvel
                     movieCredits = await response2.Content.ReadAsStringAsync();
                 }   
             }
+
+        public async Task GetSImilarMovies(int id)
+        {
+            RunClient();
+
+            // grab similar movies
+            HttpResponseMessage response = await client.GetAsync("https://api.themoviedb.org/3/movie/" + id 
+                                                + "/similar?api_key=d194eb72915bc79fac2eb1a70a71ddd3&language=en-US&page=1");
+
+            if (response.IsSuccessStatusCode)
+            {
+                SimilarMovies = await response.Content.ReadAsStringAsync();
+            }
+        }
 
         public void RunClient()
         {

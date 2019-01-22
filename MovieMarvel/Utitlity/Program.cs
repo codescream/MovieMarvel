@@ -18,6 +18,7 @@ namespace MovieMarvel
         public static Fetch Fetch = new Fetch();
         public static Control Control = new Control();
         public static Rental Rental = new Rental();
+        public static SecurePasswordHasher Hasher = new SecurePasswordHasher();
         // public static MovieContext MovieDB = new MovieContext();
 
         public static void Main(string[] args)

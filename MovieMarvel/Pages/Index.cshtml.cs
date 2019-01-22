@@ -21,6 +21,7 @@ namespace MovieMarvel.Pages
         public List<string> filter = new List<string>();
         public List<string> rentedMoviePosters = Program.Rental.moviePosters;
         public List<string> rentedMovieTitles = Program.Rental.movieTitles;
+        public List<double> rentedMovieCosts = Program.Rental.movieCosts;
 
         public string rating = "";
         public string description = "";
@@ -35,6 +36,9 @@ namespace MovieMarvel.Pages
         public string moviePosterShow = "none";
         public string showMoviePosters = "block";
         public string cartDisplay = History.GetCartDisplay();
+        public string errDisplay = "none";
+        public string creationDisplay = "none";
+        public string errCreationDisplay = "none";
         public string position = History.GetCartPosition();
         public string tooltip = "none";
         public string holder = "search";
@@ -43,6 +47,8 @@ namespace MovieMarvel.Pages
         public float thumbsDown = 1;
         public int cartItemCount = History.GetItemCount();
         public float inBetween = 1;
+        public float movieCost = 1.5f;
+        public double totalCost = Program.Rental.totalMovieCost;
 
         JsonNinja jNinja;
         JsonNinja vidNinja;
@@ -58,7 +64,7 @@ namespace MovieMarvel.Pages
                 await OnPostPoster(id);
             }
         }
-            public async Task OnPostVote(string vote)
+        public async Task OnPostVote(string vote)
         {
             using (SqlConnection myConn = new SqlConnection(Program.Fetch.cs))
             {
@@ -122,38 +128,71 @@ namespace MovieMarvel.Pages
             await ShowPoster(search);
         }
 
-        public async Task OnPostLogin(string email, string password)
+        public async Task OnPostLogin(string emailsignin, string passwordsignin)
         {
-            int cartCount = Program.Control.Login(email, password); // login and retrieve cart item count
-            History.SetItemCount(cartCount);
-            cartItemCount = History.GetItemCount();
-            cartDisplay = "inline";
+            int cartCount = Program.Control.Login(emailsignin, passwordsignin); // login and retrieve cart item count
 
-            if(Program.Rental.movieIDs.Count > 0)
+            if(cartCount < 0)
             {
-                Program.Rental.AddItemsFromList(cartID: Program.Control.CartID);
-                cartItemCount = History.GetItemCount() + Program.Rental.addedListItems;
-                History.SetItemCount(cartItemCount);
+                errDisplay = "inline";
+                await ReloadPageContent();
             }
             else
             {
-                //return current cart item count
-               cartItemCount = History.GetItemCount();
-            }
+                History.SetItemCount(cartCount);
+                cartItemCount = History.GetItemCount();
+                totalCost = Program.Rental.totalMovieCost;
+                cartDisplay = "inline";
 
-            await ReloadPageContent();
+                if (Program.Rental.movieIDs.Count > 0)
+                {
+                    Program.Rental.AddItemsFromList(cartID: Program.Control.CartID);
+                    totalCost = Program.Rental.totalMovieCost;
+                    cartItemCount = History.GetItemCount() + Program.Rental.addedListItems;
+                    History.SetItemCount(cartItemCount);
+                }
+                else
+                {
+                    //return current cart item count
+                    cartItemCount = History.GetItemCount();
+
+                    //get movie details from database
+                    Program.Rental.GetMovieList(cartID: Program.Control.CartID);
+                    totalCost = Program.Rental.totalMovieCost;
+                }
+
+                await AdjustCartDivs();
+            }
         }
 
         public async Task OnPostSignout()
         {
             Program.Control.UserExist = 0;
+            Program.Control.CartID = 0;
+            Program.Rental.movieIDs.Clear();
+            Program.Rental.moviePosters.Clear();
+            Program.Rental.movieTitles.Clear();
+            Program.Rental.movieCosts.Clear();
             History.ResetItemCount();
+            History.SetCartDisplay("none");
+            History.SetCartPosition("0px");
+            cartDisplay = History.GetCartDisplay();
+            position = History.GetCartPosition();
             cartItemCount = History.GetItemCount();
             await ReloadPageContent();
         }
-        public async Task OnPostCreateAccount(string email, string password)
+        public async Task OnPostCreateAccount(string myemail, string mypassword)
         {
-            Program.Control.CreateAccount(email, password);
+            int userExist =  Program.Control.CreateAccount(myemail, mypassword);
+
+            if(userExist < 0)
+            {
+                errCreationDisplay = "inline";
+            }
+            else
+            {
+                creationDisplay = "inline";
+            }
             
             await ReloadPageContent();
         }
@@ -169,21 +208,27 @@ namespace MovieMarvel.Pages
             string movieTitle = History.GetMovieTitle();
             string moviePoster = History.GetBackDrop();//movie poster
             
-            int addItem = Program.Rental.AddItem(movieID, Program.Control.CartID, movieTitle, moviePoster);
+            int addItem = Program.Rental.AddItem(movieID, Program.Control.CartID, movieCost, movieTitle, moviePoster);
             if(addItem == 0)//item already in cart
             {
                 //show and fade away 'movie already exist' tooltip
                 tooltip = "inline";
-                await AdjustCartDivs();
+                if(History.GetItemCount() != 0)
+                {
+                    await AdjustCartDivs();
+                }
+                else
+                {
+                    await ReloadPageContent();
+                }
             }
             else
             {
-                History.IncrementItemCount();
+                History.AdjustItemCount(1);
                 cartItemCount = History.GetItemCount();
+                totalCost = Program.Rental.totalMovieCost;
                 await AdjustCartDivs();
             }
-
-            
         }
         public async Task OnPostMovies(string intent)
         {
@@ -322,5 +367,11 @@ namespace MovieMarvel.Pages
             History.SetCartPosition("-13px");
             await ReloadPageContent();
         }
+
+        /*public void OnPostCheckOut()
+        {
+            History.CartSubtotal = 1;
+            //Program.Control.HashPasswordsInDatabase();
+        }*/
     }
 }

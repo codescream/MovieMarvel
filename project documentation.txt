@@ -1,0 +1,15 @@
+- Has a tooltip that shows and fades out close to the rent movie button to inform user of duplicate entry
+- drop-down pane sign up form
+- number of items in cart shown
+- Cast page as a slide show of other movies for the cast and clicking on the picture in the slide does a search of    the movie
+- In the cart preview, pointing on a truncated title shows the full title as a tooltip
+- email and password validation for both signin and signup features
+- error message display on entry of wrong log in credentials
+- password hashing-created hashing class
+- ability to change vote
+- check to avoid duplicate username(email) creation and displays error message
+- user creation confirmation
+- sign up, sign in, cart work through all pages 
+- click on movies in cart to search them again
+- displays message if search field is empty or returns no searches
+- there's an extra div on the cart page that could be used to display past searches

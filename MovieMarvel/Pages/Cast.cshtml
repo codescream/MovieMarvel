@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Cast";
 }
-<div id="castGrid" onclick="closeForm()" style="background-image:url(../images/background.png), url(https://image.tmdb.org/t/p/original/@Model.backDrop); background-size: cover, cover; background-position: center, center">
+<div id="castGrid" onclick="closeForm(), resetInputs()" style="background-image:url(../images/background.png), url(https://image.tmdb.org/t/p/original/@Model.backDrop); background-size: cover, cover; background-position: center, center">
     <header id="castheader">
         <a href="./Index" title="Home page">
             <input type="image" src="~/images/MovieMagicbsLogo.png"/>

@@ -4,13 +4,19 @@
 // Write your Javascript code.
 
 //get elements with same class name
+
+if (document.title == "Cast - MovieMarvel")
+{
+    //set initial poster values
+    var imageLink = document.getElementById("0").getAttribute("src");
+    document.getElementById("mySlides").setAttribute("src", imageLink);
+    var titles = document.getElementById("0").getAttribute("name");
+    document.getElementById("title").innerHTML = titles;
+    document.getElementById("mySlides").setAttribute("value", document.getElementById("0").getAttribute("name"));
+}
+var show = 0;
+var closeCartFunction;
 var slides = document.getElementsByClassName("images");
-//set initial poster values
-var imageLink = document.getElementById("0").getAttribute("src");
-document.getElementById("mySlides").setAttribute("src", imageLink);
-var titles = document.getElementById("0").getAttribute("name");
-document.getElementById("title").innerHTML = titles;
-document.getElementById("mySlides").setAttribute("value", document.getElementById("0").getAttribute("name"));
 
 var slideIndex = 0;
 
@@ -63,9 +69,9 @@ function getDetails(id)
     document.getElementById("mySlides").setAttribute("value", document.getElementById(id).getAttribute("name"));
 }
 
-var show = "false";
 function showSignupForm()
 {
+    closeCartInstant();
     // open panel
         $("#signupForm").animate({
             height: 'toggle'
@@ -75,7 +81,7 @@ function showSignupForm()
         height: 'toggle'
     }, 220, 'swing');
 
-    show = "true";
+    show += 1;
     //show panel
     //document.getElementById("form").style.display = 'block';
 }
@@ -85,18 +91,6 @@ function showBigPoster()
     $("#searchImage").animate({
         height: 'toggle'
     }, 220, 'swing');
-
-
-    /*if (document.getElementById("selectedPosterdiv").style.display == "block")
-    {
-        document.getElementById("selectedPosterdiv").style.display = "none";
-        document.getElementById("panel").style.display = "none";
-    }
-    else
-    {
-        document.getElementById("selectedPosterdiv").style.display = "block";
-        document.getElementById("panel").style.display = "block";
-    }*/
 }
 
 function setdivdisplay()
@@ -113,11 +107,11 @@ function setdivdisplay()
 
 function closeForm()
 {
-    if (show == "true")
+    if (show % 2 != 0)
     {
         showSignupForm();
+        show = 2;
     }
-    show = "false";
 }
 
 function closetooltip()
@@ -125,23 +119,94 @@ function closetooltip()
     setTimeout(function () {
         $("#tooltiptext").fadeOut(3000)
     }, 2000);
+
+    setTimeout(function () {
+        $("#errlogin").fadeOut(1500)
+    }, 500);
+
+    setTimeout(function () {
+        $("#errCreation").fadeOut(3000)
+    }, 500);
+
+    setTimeout(function () {
+        $("#userCreation").fadeOut(3000)
+    }, 500);
 }
 
 function showCart()
 {
-    $("#previewCart").animate({
-        height: 'toggle'
-    }, 220, 'swing');
+    closeForm();
+    clearTimeout(closeCartFunction);
+    $("#previewCart").css("visibility", "visible");
+    $("#previewCart").css("display", "inline");
+
+    /*$('#previewCart').animate({
+        height: '150px'
+    }, 220, 'swing');*/
 }
 
 function closeCart()
 {
-    $("#previewCart").animate({
-        height: 'toggle'
-    }, 220, 'swing');
+    closeCartFunction = setTimeout(function () { $("#previewCart").css("visibility", "hidden"); }, 1000);//wait a sec before closing
+    
+    /*$('#previewCart').animate({
+        height: '0px'
+    }, 220, 'swing');*/
 }
 
-function displayCart()
+function closeCartInstant()
 {
-    document.getElementById("previewCart").css.display = "inline";
+    $("#previewCart").css("visibility", "hidden");
+}
+
+function deleteFromCart(id)
+{
+    document.getElementById("rentedMovie(" + id + ")").style.display = "none";
+    //alert($("#moviediv(" + id + ")").attr("id"));
+}
+
+function validateSignInForm()
+{
+    var w = document.forms["myform"]["signinemail"].value;
+    var z = document.forms["myform"]["signinpassword"].value;
+
+    if (w == "" && z == "") {
+        alert("Email and Password must be filled out");
+        return false;
+    }
+    else if (w == "") {
+        alert("Email must be filled out");
+        return false;
+    }
+    else if (z == "") {
+        alert("Password must be filled out");
+        return false;
+    }
+}
+
+function validateSignUpForm()
+{
+    var x = document.forms["myforms"]["signupemail"].value;
+    var y = document.forms["myforms"]["signuppassword"].value;
+    
+    if (x == "" && y == "") {
+        alert("Email and Password must be filled out");
+        return false;
+    }
+    else if (x == "") {
+        alert("Email must be filled out");
+        return false;
+    }
+    else if (y == "") {
+        alert("Password must be filled out");
+        return false;
+    }
+}
+
+function resetInputs()
+{
+    $("#signupemail").val('');
+    $("#signuppassword").val('');
+    $("#signinemail").val('');
+    $("#signinpassword").val('');
 }

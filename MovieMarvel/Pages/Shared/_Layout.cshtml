@@ -21,86 +21,96 @@
     <div id="cart">
         @if (Program.Control.UserExist == 0)
         {
-            <form method="post" asp-page-handler="Login">
-                <input id="email" type="text" name="email" placeholder=" email" onclick="closeForm()" style="top:@Model.position"/>
-                <input id="password" type="password" name="password" placeholder=" password" onclick="closeForm()" style="top:@Model.position"/>
-                <input id="submit" type="submit" name="login" value="Sign in" onclick="closeForm()" style="top:@Model.position"/>
+            <form id="signin" name="myform" method="post" asp-page-handler="Login" onsubmit="return validateSignInForm()">
+                <input id="signinemail" type="email" name="emailsignin" placeholder=" enter email" onclick="closeForm()" style="top: @Model.position" />
+                <input id="signinpassword" type="password" name="passwordsignin" placeholder=" enter password" onclick="closeForm()" style="top:@Model.position" />
+                <input id="submit" type="submit" name="login" value="Sign in" onclick="closeForm()" style="top:@Model.position" />
             </form>
-            <form method="post" style="display:@Model.cartDisplay" asp-page-handler="Showcart">
-                <input id="cartImg" type="image" src="~/images/shoppingcart.png" onclick="closeForm()" onmouseover="showCart()"/>
+            @if (Model.cartItemCount != 0)
+            {
+                <input id="cartImg" type="image" src="~/images/shoppingcart.png" onclick="closeForm()" onmouseover="showCart()" onmouseout="closeCart()" style="display:@Model.cartDisplay" />
                 @if (Model.cartItemCount > 9)
                 {
-                    <span style="left: -23px">@Model.cartItemCount</span>
+                    <span id="itemcount" style="left: -18px; display:@Model.cartDisplay" onmouseover="showCart()" onmouseout="closeCart()">@Model.cartItemCount</span>
                 }
                 else
                 {
-                    <span style="left: -20px">@Model.cartItemCount</span>
+                    <span id="itemcount" style="left: -15px; display:@Model.cartDisplay" onmouseover="showCart()" onmouseout="closeCart()">@Model.cartItemCount</span>
                 }
-            </form>
-            <button id="signupBtn" onclick="showSignupForm()" name="Sign up" style="top:@Model.position">Sign up</button>
+            }
+            <input type="submit" id="signupBtn" onclick="showSignupForm()" name="Sign up" value="Sign up" style="top:@Model.position" />
         }
         else
         {
-            <form method="post" style="display:@Model.cartDisplay" asp-page-handler="Showcart">
-                <input id="cartImg" type="image" src="~/images/shoppingcart.png" onclick="closeForm()"/>
-                @if(Model.cartItemCount > 9)
+           
+                <input id="cartImg" type="image" src="~/images/shoppingcart.png" onclick="closeForm()" onmouseover="showCart()" onmouseout="closeCart()" style="display:@Model.cartDisplay" />
+                @if (Model.cartItemCount > 9)
                 {
-                    <span id="itemcount" style="left: -28px">@Model.cartItemCount</span>
+                    <span id="itemcount" style="left: -18px; display:@Model.cartDisplay" onmouseover="showCart()" onmouseout="closeCart()">@Model.cartItemCount</span>
                 }
                 else
                 {
-                    <span id="itemcount" style="left: -25px">@Model.cartItemCount</span>
+                    <span id="itemcount" style="left: -15px; display:@Model.cartDisplay" onmouseover="showCart()" onmouseout="closeCart()">@Model.cartItemCount</span>
                 }
-            </form>
-            <form method="post" asp-page-handler="Signout">
-                <input id="submit" type="submit" name="Sign out" value="sign out"/>
+
+            <form id="signout" method="post" asp-page-handler="Signout">
+                <input id="signoutBtn" type="submit" name="Sign out" value="Sign out" />
             </form>
         }
     </div>
-    <div id="previewCart" onmousemove="displayCart()" onmouseout="closeCart()">
-        @if (Model.rentedMoviePosters.Count > 0)
-        {
+    <div id="errlogin" style="display: @Model.errDisplay">Incorrect username or password!</div>
+    <div id="userCreation" style="display: @Model.creationDisplay">Account created successfully!</div>
+    <div id="errCreation" style="display: @Model.errCreationDisplay">Username already exist!</div>
+    @if (Model.rentedMoviePosters.Count > 0)
+    {
+        <div id="previewCart" onmouseover="showCart()" onmouseout="closeCartInstant()">
+
             @for (int i = 0; i < Model.rentedMoviePosters.Count; i++)
             {
-                <img src="https://image.tmdb.org/t/p/w500/@Model.rentedMoviePosters[i]" style="width: 15%; display: inline; margin: 2px; ">
-                if (@Model.rentedMovieTitles[i].Length > 15)
-                {
-                    <span>@Model.rentedMovieTitles[i].Substring(0, 15)...</span>
-                }
-                else
-                {
-                    string title = @Model.rentedMovieTitles[i] + "               ";
-                    <span>@title.Substring(0, 15)...</span>
-                }
-                <span>$1.99</span>
-                <select>
-                    <option>rent</option>
-                    <option>1 day</option>
-                    <option>2 days</option>
-                    <option>3 days</option>
-                </select>
-                <button>Remove</button>
-                if (i < Model.rentedMoviePosters.Count - 1)
-                {
-                    <hr/>
-                }
+                <div id="moviediv(@i)">
+                    <img src="https://image.tmdb.org/t/p/w500/@Model.rentedMoviePosters[i]">
+                    <div id="titlediv" title="@Model.rentedMovieTitles[i]">
+                        @if (Model.rentedMovieTitles[i].Length > 30)
+                        {
+                            <p id="title">@Model.rentedMovieTitles[i].Substring(0, 30)...</p>
+                        }
+                        else
+                        {
+                            <p id="title">@Model.rentedMovieTitles[i]</p>
+                        }
+                    </div>
+                    <p id="cost">$@Model.rentedMovieCosts[i]</p>
+                    @if (i < Model.rentedMoviePosters.Count - 1)
+                    {
+                        <hr />
+                    }
+                </div>
             }
-            <button id="checkout">Check Out</button>
-        }
-    </div>
+            <hr />
+            <div class="checkout" style="text-align: center">
+                <p style="float: left; font-size: medium">Subtotal</p>
+                <p style="float: right; font-size: medium">$@Model.totalCost</p>
+            </div>
+            <div style="text-align: center">
+                <a asp-page="./Cart" asp-route-id="@Model.rentedMoviePosters.Count">
+                    <input type="button" class="checkout" value="CHECKOUT"/>
+                </a>
+            </div>
+        </div>
+    }
     <div id="blocker" onclick="closeForm()" style="display:@Model.showSignUpForm"></div>
     <div id="signupForm" style="display:@Model.showSignUpForm">
-        <div style="float: right; width: 20%">
-            <form id="form" method="post" style="background:white; width: 100%; border: 2px solid black; background: gold;" asp-page-handler="CreateAccount">
+        <div>
+            <form id="form" name="myforms" method="post" asp-page-handler="CreateAccount" onsubmit="return validateSignUpForm()">
                 <fieldset>
                     <legend>Sign-up Form:<span id="close" onclick="closeForm()">x</span></legend>
                     <span>Email:</span><br>
-                    <input class="signupFormInput" type="text" name="email" placeholder=" enter email" style="width: 95%">
+                    <input class="signupFormInput; inputfield" id="signupemail" type="email" name="myemail" placeholder=" enter email">
                     <br>
                     <span>Password:</span><br>
-                    <input class="signupFormInput" type="password" name="password" placeholder=" password" style="width: 95%">
+                    <input class="signupFormInput; inputfield" id="signuppassword" type="password" name="mypassword" placeholder=" enter password">
                     <br><br>
-                    <input class="signupFormInput" type="submit" value="Create Account" style="margin-bottom: 5px">
+                    <input class="signupFormInput" id="inputBtn" type="submit" value="Create Account">
                 </fieldset>
             </form>
         </div>

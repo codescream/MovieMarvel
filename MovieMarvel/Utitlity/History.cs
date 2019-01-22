@@ -13,6 +13,7 @@ namespace MovieMarvel
         static string cartDisplay = "none";
         public static string cartPosition = "0px";
         public static int itemCount = 0;
+        public static int CartSubtotal { get; set; }
         public static int CastID { get; set; }
         public static void SetMovieID(string id)
         {
@@ -38,9 +39,9 @@ namespace MovieMarvel
             return itemCount;
         }
 
-        public static void IncrementItemCount()
+        public static void AdjustItemCount(int adjustment)
         {
-            itemCount++;
+            itemCount += adjustment; ;
         }
 
         public static void ResetItemCount()
