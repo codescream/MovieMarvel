@@ -77,9 +77,10 @@
             <img src="~/images/GoldStar.png">
             <h1>@Model.rating</h1>
             <form method="post" asp-page-handler="Vote">
-                <input type="image" class="rater" name="vote" value="2" src="~/images/thumbs-up-sign_iphone.png" style="opacity:@Model.thumbsUp" />
-                <input type="image" class="rater" name="vote" value="1" src="~/images/shrug_apple.png" style="opacity:@Model.inBetween" />
-                <input type="image" class="rater" name="vote" value="0" src="~/images/thumbs-down-sign_iphone.png" style="opacity:@Model.thumbsDown" />
+                <input type="image" class="rater" onclick="MovieVote(this.value);" value="2" src="~/images/thumbs-up-sign_iphone.png" style="opacity:@Model.thumbsUp" />
+                <input type="image" class="rater" onclick="MovieVote(this.value);" value="1" src="~/images/shrug_apple.png" style="opacity:@Model.inBetween" />
+                <input type="image" class="rater" onclick="MovieVote(this.value);" value="0" src="~/images/thumbs-down-sign_iphone.png" style="opacity:@Model.thumbsDown" />
+                <input id="movieVote" name="vote" hidden/>
             </form>
         </div>
     </div>

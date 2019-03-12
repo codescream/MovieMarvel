@@ -181,6 +181,7 @@ namespace MovieMarvel.Pages
             cartItemCount = History.GetItemCount();
             await ReloadPageContent();
         }
+
         public async Task OnPostCreateAccount(string myemail, string mypassword)
         {
             int userExist =  Program.Control.CreateAccount(myemail, mypassword);

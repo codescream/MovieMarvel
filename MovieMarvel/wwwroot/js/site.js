@@ -171,15 +171,12 @@ function validateSignInForm()
     var z = document.forms["myform"]["signinpassword"].value;
 
     if (w == "" && z == "") {
-        alert("Email and Password must be filled out");
         return false;
     }
     else if (w == "") {
-        alert("Email must be filled out");
         return false;
     }
     else if (z == "") {
-        alert("Password must be filled out");
         return false;
     }
 }
@@ -190,15 +187,12 @@ function validateSignUpForm()
     var y = document.forms["myforms"]["signuppassword"].value;
     
     if (x == "" && y == "") {
-        alert("Email and Password must be filled out");
         return false;
     }
     else if (x == "") {
-        alert("Email must be filled out");
         return false;
     }
     else if (y == "") {
-        alert("Password must be filled out");
         return false;
     }
 }
@@ -209,4 +203,9 @@ function resetInputs()
     $("#signuppassword").val('');
     $("#signinemail").val('');
     $("#signinpassword").val('');
+}
+
+function MovieVote(value)
+{
+    document.getElementById("movieVote").value = value;
 }

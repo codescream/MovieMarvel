@@ -22,9 +22,9 @@
         @if (Program.Control.UserExist == 0)
         {
             <form id="signin" name="myform" method="post" asp-page-handler="Login" onsubmit="return validateSignInForm()">
-                <input id="signinemail" type="email" name="emailsignin" placeholder=" enter email" onclick="closeForm()" style="top: @Model.position" />
-                <input id="signinpassword" type="password" name="passwordsignin" placeholder=" enter password" onclick="closeForm()" style="top:@Model.position" />
-                <input id="submit" type="submit" name="login" value="Sign in" onclick="closeForm()" style="top:@Model.position" />
+                <input id="signinemail" type="email" name="emailsignin" placeholder=" enter email" onclick="closeForm()" style="top: @Model.position" required/>
+                <input id="signinpassword" type="password" name="passwordsignin" placeholder=" enter password" onclick="closeForm()" style="top:@Model.position" required/>
+                <input id="submit" type="submit" name="login" value="Sign in" onclick="closeForm()" style="top:@Model.position" required/>
             </form>
             @if (Model.cartItemCount != 0)
             {
@@ -105,12 +105,12 @@
                 <fieldset>
                     <legend>Sign-up Form:<span id="close" onclick="closeForm()">x</span></legend>
                     <span>Email:</span><br>
-                    <input class="signupFormInput; inputfield" id="signupemail" type="email" name="myemail" placeholder=" enter email">
+                    <input class="signupFormInput; inputfield" id="signupemail" type="email" name="myemail" placeholder=" enter email" required/>
                     <br>
                     <span>Password:</span><br>
-                    <input class="signupFormInput; inputfield" id="signuppassword" type="password" name="mypassword" placeholder=" enter password">
+                    <input class="signupFormInput; inputfield" id="signuppassword" type="password" name="mypassword" placeholder=" enter password" required>
                     <br><br>
-                    <input class="signupFormInput" id="inputBtn" type="submit" value="Create Account">
+                    <input class="signupFormInput" id="inputBtn" type="submit" value="Create Account" required />
                 </fieldset>
             </form>
         </div>
